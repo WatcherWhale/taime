@@ -1,8 +1,8 @@
 const fs = require("fs");
-const process = require("process");
 
 const axios = require("axios");
 
+const process = require("process");
 const opaUrl = process.env["OPA_URL"];
 
 module.exports.register = async (policy, regoFile) => {

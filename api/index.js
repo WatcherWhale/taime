@@ -7,10 +7,14 @@ const app = express();
 const userRouter = express.Router();
 const adminRouter = express.Router();
 
+const process = require("process");
+const keycloakUrl = process.env["KEYCLOAK_URL"];
+console.log(keycloakUrl)
+
 app.use(oauth2.auth({
-    issuer: "http://localhost:8080/realms/taime",
-    issuerBaseURL: "http://localhost:8080/realms/taime",
-    jwksUri: "http://localhost:8080/realms/taime/protocol/openid-connect/certs",
+    issuerBaseURL: keycloakUrl + "/realms/taime",
+    issuer: keycloakUrl + "/realms/taime",
+    jwksUri: keycloakUrl + "/realms/taime/protocol/openid-connect/certs",
     audience: "account"
 }));
 

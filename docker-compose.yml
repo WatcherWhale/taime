@@ -44,6 +44,7 @@ services:
     depends_on:
       - opa
     environment:
+      KEYCLOAK_URL: http://keycloak:8080
       OPA_URL: http://opa:8181
 
   frontend:

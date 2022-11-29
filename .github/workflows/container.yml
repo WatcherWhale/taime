@@ -12,7 +12,7 @@ jobs:
       - name: Build API
         run: |-
           cd api
-        docker build -t "ghcr.io/watcherwhale/taime-api:${{ github.sha }}" .
+          docker build -t "ghcr.io/watcherwhale/taime-api:${{ github.sha }}" .
 
       - name: Scan API Container
         uses: aquasecurity/trivy-action@master

@@ -1,0 +1,41 @@
+on:
+  push:
+    branches: [ "master" ]
+
+runs-on: ubuntu-latest
+
+jobs:
+  build:
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build API
+        run: |-
+          cd api
+        docker build -t "ghcr.io/watcherwhale/taime-api:${{ github.sha }}" .
+
+      - name: Scan API Container
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/watcherwhale/taime-api:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Build SPA
+        run: |-
+          cd taime-spa
+          docker build -t "ghcr.io/watcherwhale/taime-spa:${{ github.sha }}" .
+
+      - name: Scan SPA Container
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/watcherwhale/taime-spa:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+

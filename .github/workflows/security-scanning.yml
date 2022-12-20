@@ -18,7 +18,8 @@ jobs:
       - name: Scan API Container
         uses: aquasecurity/trivy-action@master
         if: always()
-        needs: ["Build API"]
+        needs:
+          - Build API
         with:
           image-ref: 'ghcr.io/watcherwhale/taime-api:${{ github.sha }}'
           format: 'table'
@@ -35,7 +36,8 @@ jobs:
 
       - name: Scan SPA Container
         if: always()
-        needs: ["Build SPA"]
+        needs:
+          - Build SPA
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'ghcr.io/watcherwhale/taime-spa:${{ github.sha }}'

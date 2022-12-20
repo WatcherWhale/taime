@@ -10,12 +10,15 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build API
+        if: always()
         run: |-
           cd api
           docker build -t "ghcr.io/watcherwhale/taime-api:${{ github.sha }}" .
 
       - name: Scan API Container
         uses: aquasecurity/trivy-action@master
+        if: always()
+        needs: ["Build API"]
         with:
           image-ref: 'ghcr.io/watcherwhale/taime-api:${{ github.sha }}'
           format: 'table'
@@ -25,11 +28,14 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Build SPA
+        if: always()
         run: |-
           cd taime-spa
           docker build -t "ghcr.io/watcherwhale/taime-spa:${{ github.sha }}" .
 
       - name: Scan SPA Container
+        if: always()
+        needs: ["Build SPA"]
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'ghcr.io/watcherwhale/taime-spa:${{ github.sha }}'
@@ -41,6 +47,7 @@ jobs:
 
       - name: Scan Postgres Container
         uses: aquasecurity/trivy-action@master
+        if: always()
         with:
           image-ref: 'postgres'
           format: 'table'
@@ -51,6 +58,7 @@ jobs:
 
       - name: Scan Keycloak Container
         uses: aquasecurity/trivy-action@master
+        if: always()
         with:
           image-ref: 'quay.io/keycloak/keycloak:19.0.3'
           format: 'table'
@@ -61,6 +69,7 @@ jobs:
 
       - name: Scan OPA Container
         uses: aquasecurity/trivy-action@master
+        if: always()
         with:
           image-ref: 'openpolicyagent/opa:0.45.0-rootless'
           format: 'table'
@@ -71,6 +80,7 @@ jobs:
 
       - name: Scan Filesystem
         uses: aquasecurity/trivy-action@master
+        if: always()
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -80,3 +90,4 @@ jobs:
 
       - name: semgrep-action
         uses: returntocorp/semgrep-action@v1
+        if: always()

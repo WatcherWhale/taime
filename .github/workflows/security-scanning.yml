@@ -86,6 +86,11 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
 
-      - name: semgrep-action
-        uses: returntocorp/semgrep-action@v1
+      - name: code analysis
+        uses: SecureStackCo/actions-code@v0.1.1
         if: always()
+        with:
+          securestack_api_key: ${{ secrets.SECURESTACK_API_KEY }}
+          securestack_app_id: ${{ secrets.SECURESTACK_APP_ID }}
+          severity: critical
+          language: node
